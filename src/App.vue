@@ -14,9 +14,9 @@
           :style="setStyle(index)"
         >
           <div class="text"
-            :style="generateColor()"
+            :style="generateStyle()"
           >
-          {{ person }} {{ index }}</div>
+          {{ person }}</div>
         </li>
       </ul>
       <div
@@ -53,7 +53,7 @@ export default {
       const step = 360 / this.peopleList.length
       return `transform: rotate(${step * index -15}deg) skewY(-60deg)`
     },
-    generateColor: function () {
+    generateStyle: function () {
       let color = "" 
 
       while ( color.length < 6 ) {
@@ -80,7 +80,7 @@ export default {
         (360 - 360 / peopleList.length * result);
       setTimeout(() => {
         this.rolling = false;
-        alert("Result：" + peopleList[result]);
+        alert("Mówi: " + peopleList[result]);
         peopleList.splice(result, 1);
         this.$forceUpdate();
       }, 4500);
