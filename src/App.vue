@@ -4,7 +4,7 @@
     <label for="name">Name</label>
     <input type="text" name="name" id="name" v-model="name">
     <button v-on:click="peopleList.push(name)">Add</button>
-    <button v-on:click="peopleList.splice(peopleList.indexOf(name), 1)">Remove</button>
+    <button v-on:click="removePerson(name)">Remove</button>
     <dir id="wrapper">
       <ul class="circle"
         :class="{freeze: freeze}"
@@ -44,6 +44,11 @@ export default {
   components: {
   },
   methods: {
+    removePerson: function (name) {
+      if (this.peopleList.includes(name)) {
+        this.peopleList.splice(this.peopleList.indexOf(name), 1)
+      }
+    },
     setStyle: function (index) {
       const step = 360 / this.peopleList.length
       return `transform: rotate(${step * index -15}deg) skewY(-60deg)`
