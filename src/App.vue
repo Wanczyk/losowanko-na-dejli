@@ -4,13 +4,18 @@
     <label for="name">Name</label>
     <input type="text" name="name" id="name" v-model="name">
     <button v-on:click="peopleList.push(name)">Add</button>
-    <button v-on:click="removePerson(name)">Remove</button>
+    <ul class="peopleList">
+      <li v-for="(name, index) in peopleList" :key="index" class="row">
+        <span class="col">{{ name }}   </span> 
+        <button v-on:click="removePerson(index)" class="col col-lg-2">Remove</button>
+      </li>
+    </ul>
     <dir id="wrapper">
       <ul class="circle"
         :class="{freeze: freeze}"
         :style="`transform: rotate(${wheelDeg}deg)`"
       >
-        <li v-for="(person, index) in peopleList" :key="index"
+        <li class="list" v-for="(person, index) in peopleList" :key="index"
           :style="setStyle(index)"
         >
           <div class="text"
@@ -44,10 +49,8 @@ export default {
   components: {
   },
   methods: {
-    removePerson: function (name) {
-      if (this.peopleList.includes(name)) {
-        this.peopleList.splice(this.peopleList.indexOf(name), 1)
-      }
+    removePerson: function (index) {
+      this.peopleList.splice(index, 1)
     },
     setStyle: function (index) {
       const step = 360 / this.peopleList.length
@@ -108,6 +111,9 @@ export default {
     width: 40em;
     height: 40em;
   }
+  .row {
+    list-style-type: none;
+  }
   .circle {
     position: relative;
     border: 1px solid black;
@@ -119,7 +125,7 @@ export default {
     list-style: none;
     overflow: hidden;
   }
-  li {
+  .list {
     overflow: hidden;
     position: absolute;
     top: 0; 
@@ -129,7 +135,7 @@ export default {
     transform-origin: 0% 100%;      
   }
   
-  ul {
+  .circle {
     width: 100%;
     height: 100%;
     border-radius: 1000px;
