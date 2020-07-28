@@ -70,6 +70,10 @@ export default {
       if (this.rolling) {
         return;
       }
+      else if ( peopleList.length == 0) {
+        alert("Koniec osób");
+        return;
+      }
       const result = Math.floor(Math.random() * this.peopleList.length);
       this.roll(result);
     },
@@ -83,10 +87,6 @@ export default {
         (360 - 360 / peopleList.length * result);
       setTimeout(() => {
         this.rolling = false;
-        if ( peopleList.length == 0) {
-          alert("Koniec osób");
-          return;
-        }
         alert("Mówi: " + peopleList[result]);
         peopleList.splice(result, 1);
         this.$forceUpdate();
