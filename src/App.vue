@@ -70,7 +70,7 @@ export default {
       if (this.rolling) {
         return;
       }
-      else if ( peopleList.length == 0) {
+      else if ( this.peopleList.length == 0) {
         alert("Koniec osób");
         return;
       }
