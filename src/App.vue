@@ -83,6 +83,10 @@ export default {
         (360 - 360 / peopleList.length * result);
       setTimeout(() => {
         this.rolling = false;
+        if ( peopleList.length == 0) {
+          alert("Koniec osób");
+          return;
+        }
         alert("Mówi: " + peopleList[result]);
         peopleList.splice(result, 1);
         this.$forceUpdate();
