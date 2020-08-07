@@ -43,7 +43,7 @@ export default {
       freeze: false,
       rolling: false,
       wheelDeg: 0,
-      peopleList: ['Filip', 'Jakub', 'Blazej', 'Patryk', 'Marcin', 'Rafał', 'Martin', 'Andrzej', 'Krzysztof', 'Sebestain', 'Anna', 'Konrad', 'Daniela', 'Vladyslav', 'Artur']
+      peopleList: ['Filip', 'Jakub', 'Blazej', 'Patryk', 'Marcin', 'Rafał', 'Martin', 'Andrzej', 'Krzysztof', 'Sebastian', 'Anna', 'Konrad', 'Daniela', 'Vladyslav', 'Artur']
     }
   },
   components: {
