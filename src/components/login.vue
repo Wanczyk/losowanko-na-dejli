@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     joinRoom: function () {
+        console.log(this.name, this.loggin)
       if(this.name.length == 0) {
           alert("Name empty")
       }
@@ -48,6 +49,7 @@ export default {
           alert("Key empty")
       }
       else{
+          console.log(this.key)
           if(this.loggin){
               this.$http
                 .post('https://dejli-losowanko-backend.herokuapp.com/join', {
@@ -66,6 +68,7 @@ export default {
             console.log(this.peopleList);
           }
           else {
+          console.log(this.name)
             this.$http
                 .post('https://dejli-losowanko-backend.herokuapp.com/create', {
                         name: this.name
