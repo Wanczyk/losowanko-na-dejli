@@ -22,7 +22,6 @@
   </div>
 </template>
 
-
 <script>
 
 import wheel from './wheel';
