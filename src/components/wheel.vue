@@ -93,7 +93,7 @@ export default {
         alert("Koniec osób");
         return;
       }
-      const result = Math.floor(Math.random() * this.peopleList.length);
+      const result = Math.floor(Math.random() * (this.peopleList.length - 1));
       this.$http
         .post('https://dejli-losowanko-backend.herokuapp.com/spin', {
             roomKey: this.roomKey,
