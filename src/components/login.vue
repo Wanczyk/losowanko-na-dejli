@@ -1,26 +1,20 @@
 <template>
-  <div id="login" class="container">
+  <div id="login" class="container-fluid" align="center">
       <div id="loginForm" v-if="!responseGood">
-          <form>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Name</label>
-                <input type="text" name="name" id="name" v-model="name" class="form-control" aria-describedby="name">
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" v-model="loggin">
-                <label class="form-check-label">Login?</label>
-            </div>
-            <div class="form-group">
-                <span v-if="loggin">Room key: <input type="text" class="form-control" name="roomKey" id="roomKey" v-model="roomKey"></span>
-            </div>
-            <button v-on:click="joinRoom()" class="btn btn-primary" v-text="loggin == true ? 'Login' : 'Create room'"></button>
-          </form>
+
+        <div class="row">
+        <span>Name: <input type="text" name="name" id="name" v-model="name"></span><br />
+        <span>Login? <input type="checkbox" id="checkbox" v-model="loggin"></span><br />
+        <span v-if="loggin">Room key: <input type="text" name="roomKey" id="roomKey" v-model="roomKey"></span><br />
+        <button v-on:click="joinRoom()" v-text="loggin == true ? 'Login' : 'Create room'"></button>
+      </div>
       </div>
         <div id="wheel" v-if="responseGood">
             <wheel :peopleList="peopleList" :roomKey="roomKey" :name="name"></wheel>
         </div>
   </div>
 </template>
+
 
 <script>
 
@@ -41,7 +35,6 @@ export default {
   },
   methods: {
     joinRoom: function () {
-        console.log(this.name, this.loggin)
       if(this.name.length == 0) {
           alert("Name empty")
       }
@@ -49,7 +42,6 @@ export default {
           alert("Key empty")
       }
       else{
-          console.log(this.key)
           if(this.loggin){
               this.$http
                 .post('https://dejli-losowanko-backend.herokuapp.com/join', {
@@ -68,7 +60,6 @@ export default {
             console.log(this.peopleList);
           }
           else {
-          console.log(this.name)
             this.$http
                 .post('https://dejli-losowanko-backend.herokuapp.com/create', {
                         name: this.name
