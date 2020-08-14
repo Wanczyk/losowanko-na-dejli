@@ -2,11 +2,11 @@
   <div id="login" class="container-fluid" align="center">
       <div id="loginForm" v-if="!responseGood">
 
-        <div class="row">
-        <span>Name: <input type="text" name="name" id="name" v-model="name"></span><br />
-        <span>Login? <input type="checkbox" id="checkbox" v-model="loggin"></span><br />
-        <span v-if="loggin">Room key: <input type="text" name="roomKey" id="roomKey" v-model="roomKey"></span><br />
-        <button v-on:click="joinRoom()" v-text="loggin == true ? 'Login' : 'Create room'"></button>
+        <div class="container">
+            <span>Name: <input type="text" name="name" id="name" v-model="name"></span><br />
+            <span>Login? <input type="checkbox" id="checkbox" v-model="loggin"></span><br />
+            <span v-if="loggin">Room key: <input type="text" name="roomKey" id="roomKey" v-model="roomKey"></span><br />
+            <button v-on:click="joinRoom()" v-text="loggin == true ? 'Login' : 'Create room'"></button>
       </div>
       </div>
         <div id="wheel" v-if="responseGood">
