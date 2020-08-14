@@ -60,6 +60,9 @@ export default {
     },
     getPeople: function (data) {
       this.peopleList = data
+      if(this.peopleList.length == 0){
+        alert("Koniec osob")
+      }
     }
   },
   methods: {
