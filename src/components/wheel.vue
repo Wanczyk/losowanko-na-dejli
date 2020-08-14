@@ -1,7 +1,7 @@
 <template>
-  <div id="wheel">
-    <span v-if="roomKey.length">{{ roomKey }}</span><br />
-    <span>Mówi: {{ nowSpeeking }}</span>
+  <div id="wheel" class="container-fluid">
+    <span v-if="roomKey.length"><h1>Key: {{ roomKey }}</h1></span><br />
+    <span><h2>Mówi: {{ nowSpeeking }}</h2></span>
     <dir id="wrapper">
       <ul class="circle"
         :class="{freeze: freeze}"
@@ -13,7 +13,7 @@
           <div class="text"
             :style="generateStyle()"
           >
-          {{ person }}</div>
+          <h5>{{ person }}</h5></div>
         </li>
       </ul>
       <div
