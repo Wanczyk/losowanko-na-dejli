@@ -53,6 +53,7 @@ export default {
       console.log('socket connected')
     },
     spinThatWheel: function (data) {
+      this.rolling = true;
       this.roll(data)
     },
     someoneJoined: function (data) {
