@@ -1,13 +1,14 @@
 <template>
   <div id="wheel">
     <span v-if="roomKey.length">{{ roomKey }}</span><br />
+    <span>Name: <input type="text" name="name" id="name" v-model="name"><button v-on:click="joinRoom()">Join</button></span><br />
     <span>Mówi: {{ nowSpeeking }}</span>
     <dir id="wrapper">
       <ul class="circle"
         :class="{freeze: freeze}"
         :style="`transform: rotate(${wheelDeg}deg)`"
       >
-        <li class="list" v-for="(person, index) in peopleList" :key="index"
+        <li class="list" v-for="(person, index) in remaining" :key="index"
           :style="setStyle(index)"
         >
           <div class="text"
@@ -31,47 +32,45 @@
 export default {
   name: 'wheel',
   props: {
-    myName: String,
-    peopleList: Array,
-    roomKey: String
+    roomKey: String,
+    socket: null,
+    url: String
   },
   data() {
     return{
       freeze: false,
       rolling: false,
+      name: "",
       wheelDeg: 0,
       nowSpeeking: '',
-      result: null
+      result: null,
+      remaining: null
     }
   },
-  created: function () {
-            console.log('data from parent component:')
-            console.log(this.key) //prints out an empty string
-        },
-  sockets: {
-    connect: function () {
-      console.log('socket connected')
-    },
-    spinThatWheel: function (data) {
-      this.rolling = true;
-      this.roll(data)
-    },
-    someoneJoined: function (data) {
-      this.peopleList = data
-    },
-    getPeople: function (data) {
-      this.peopleList = data
-      if(this.peopleList.length == 0){
-        alert("Koniec osob")
+  created() {
+    var self = this
+    this.socket.onmessage = function(event) {
+      var data = JSON.parse(event.data)
+      console.log(data)
+      self.remaining = data.remaining
+      if (data.picked != null) {
+        if ( data.remaining.length == 0) {
+          alert("Koniec osób");
+          return;
+        }
+        self.roll(data.picked)
       }
     }
   },
   methods: {
-    removePerson: function (index) {
-      this.peopleList.splice(index, 1)
+    joinRoom: function () {
+      this.socket.send(JSON.stringify({
+        "message": "join_room",
+        "name": this.name
+      }))
     },
     setStyle: function (index) {
-      const step = 360 / this.peopleList.length
+      const step = 360 / this.remaining.length
       return `transform: rotate(${step * index -15}deg) skewY(-60deg)`
     },
     generateStyle: function () {
@@ -80,57 +79,35 @@ export default {
       while ( color.length < 6 ) {
         color += (Math.round(Math.random() * 15)).toString(16) 
       }
-      let style = "background: #" + color
+      let style = "background: #fff"
       style += ";transform: skewY(60deg) rotate(15deg)"
       return style
     },
     onClickRotate() {
-      this.$http
-        .post('https://dejli-losowanko-backend.herokuapp.com/get', {
-                        key: this.roomKey
-                    }
-                );
       if (this.rolling) {
         return;
       }
-      else if ( this.peopleList.length == 0) {
-        alert("Koniec osób");
-        return;
-      }
-      this.rolling = true;
-      const result = Math.floor(Math.random() * (this.peopleList.length - 1));
-      this.$http
-        .post('https://dejli-losowanko-backend.herokuapp.com/spin', {
-            roomKey: this.roomKey,
-            resultNumber: result
-        });
+      this.socket.send(JSON.stringify({
+        "message": "spin"
+      }))
     },
     roll(result) {
+      var self = this
       this.rolling = true;
-      const { wheelDeg, peopleList } = this;
+      const { wheelDeg, remaining } = this;
       this.wheelDeg =
         wheelDeg -
         (wheelDeg % 360) +
         (6 * 360) +
-        (360 - 360 / peopleList.length * result);
+        (360 - 360 / remaining.length * result);
       setTimeout(() => {
-        this.rolling = false;
-        this.result = result;
-        this.nowSpeeking = peopleList[this.result];
-        this.$forceUpdate();
+        self.rolling = false;
+        self.result = result;
+        self.nowSpeeking = remaining[result];
+        self.$forceUpdate();
       }, 4500);
     }
   },
-  watch: {
-    peopleNumber() {
-      this.freeze = true;
-      this.wheelDeg = 0;
-
-      setTimeout(() => {
-        this.freeze = false;
-      }, 0);
-    }
-  }
 }
 </script>
 

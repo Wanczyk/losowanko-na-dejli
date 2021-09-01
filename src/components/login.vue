@@ -1,16 +1,14 @@
 <template>
   <div id="login" class="container-fluid" align="center">
-      <div id="loginForm" v-if="!responseGood">
+      <div id="loginForm" v-if="!socket">
 
         <div class="container">
-            <span>Name: <input type="text" name="name" id="name" v-model="name"></span><br />
-            <span>Login? <input type="checkbox" id="checkbox" v-model="loggin"></span><br />
-            <span v-if="loggin">Room key: <input type="text" name="roomKey" id="roomKey" v-model="roomKey"></span><br />
-            <button v-on:click="joinRoom()" v-text="loggin == true ? 'Login' : 'Create room'"></button>
+            <span >Room key: <input type="text" name="roomKey" id="roomKey" v-model="roomKey"></span><br />
+            <button v-on:click="joinRoom()">Enter room</button>
       </div>
       </div>
-        <div id="wheel" v-if="responseGood">
-            <wheel :peopleList="peopleList" :roomKey="roomKey" :name="name"></wheel>
+        <div id="wheel" v-if="socket">
+            <wheel :roomKey="roomKey" :socket="socket" :url="url"></wheel>
         </div>
   </div>
 </template>
@@ -26,57 +24,33 @@ export default {
   },
   data() {
     return{
-      loggin: true,
-      name: '',
+      url: "0.0.0.0:8000/",
       roomKey: '',
-      peopleList: [],
-      responseGood: false,
+      socket: null
+    }
+  },
+  created() {
+    this.roomKey = window.location.href.split('/')[3]
+    console.log(this.roomKey)
+    if(this.roomKey != "") {
+      this.joinRoom()
+    }
+  },
+  sockets: {
+    connect: function () {
+      console.log('socket connected')
     }
   },
   methods: {
     joinRoom: function () {
-      if(this.name.length == 0) {
-          alert("Name empty")
-      }
-      else if(this.loggin && this.roomKey.length == 0) {
-          alert("Key empty")
+      if(this.roomKey.length == 0) {
+          alert("Name or key empty")
       }
       else{
-          if(this.loggin){
-              this.$http
-                .post('https://dejli-losowanko-backend.herokuapp.com/join', {
-                        name: this.name,
-                        key: this.roomKey
-                    }
-                )
-                .then(response => {
-                    console.log(response.data.msg.people)
-                    if(response.status == 200){
-                        this.peopleList = response.data.msg.people
-                        this.responseGood = true
-                    }
-                });
-            
-            console.log(this.peopleList);
-          }
-          else {
-            this.$http
-                .post('https://dejli-losowanko-backend.herokuapp.com/create', {
-                        name: this.name
-                    }
-                )
-                .then(response => {
-                    console.log(response.data.msg.people)
-                    if(response.status == 200){
-                        this.peopleList = response.data.msg.people
-                        this.roomKey = response.data.msg._key
-                        this.responseGood = true
-                    }
-                });
-          }
+        this.socket = new WebSocket('ws://0.0.0.0:8000/ws/' + this.roomKey)
       }
-    },
-  }
+    }
+  },
 }
 </script>
 

@@ -4,16 +4,13 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import * as io from 'socket.io-client'
-import VueSocketIO from 'vue-socket.io'
-
 import axios from 'axios'
 
 Vue.use(BootstrapVue)
 
-Vue.prototype.$http = axios
+axios.defaults.baseURL = 'http://127.0.0.1:8000'
 
-Vue.use(VueSocketIO, io('https://dejli-losowanko-backend.herokuapp.com'))
+Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
