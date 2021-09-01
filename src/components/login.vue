@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return{
-      url: "0.0.0.0:8000/",
+      url: "dejli-losowanko-backend.herokuapp.com:8000/",
       roomKey: '',
       socket: null
     }
@@ -47,7 +47,7 @@ export default {
           alert("Name or key empty")
       }
       else{
-        this.socket = new WebSocket('ws://0.0.0.0:8000/ws/' + this.roomKey)
+        this.socket = new WebSocket('ws://'+ this.url +'/ws/' + this.roomKey)
       }
     }
   },
