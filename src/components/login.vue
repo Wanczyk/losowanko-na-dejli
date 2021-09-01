@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return{
-      url: "dejli-losowanko-backend.herokuapp.com:5000",
+      url: "81t8hx.deta.dev/",
       roomKey: '',
       socket: null
     }
