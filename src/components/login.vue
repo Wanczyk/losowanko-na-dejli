@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return{
-      url: "81t8hx.deta.dev/",
+      url: "81t8hx.deta.dev",
       roomKey: '',
       socket: null
     }
