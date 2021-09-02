@@ -1,29 +1,44 @@
 <template>
   <div id="wheel">
-    <span v-if="roomKey.length">{{ roomKey }}</span><br />
+    <span v-if="roomKey.length">Key: {{ roomKey }}</span><br />
     <span>Name: <input type="text" name="name" id="name" v-model="name"><button v-on:click="joinRoom()">Join</button></span><br />
     <span>Mówi: {{ nowSpeeking }}</span>
-    <dir id="wrapper">
-      <ul class="circle"
-        :class="{freeze: freeze}"
-        :style="`transform: rotate(${wheelDeg}deg)`"
-      >
-        <li class="list" v-for="(person, index) in remaining" :key="index"
-          :style="setStyle(index)"
-        >
-          <div class="text"
-            :style="generateStyle()"
-          >
-          {{ person }}</div>
-        </li>
-      </ul>
-      <div
-        class="wheel-pointer"
-        @click="onClickRotate('text')"
-      >
-        Start
-      </div>
-    </dir>
+    <b-container fluid>
+      <b-row>
+        <b-col cols="8">
+          <dir id="wrapper">
+            <ul class="circle"
+              :class="{freeze: freeze}"
+              :style="`transform: rotate(${wheelDeg}deg)`"
+            >
+              <li class="list" v-for="(person, index) in remaining" :key="index"
+                :style="setStyle(index)"
+              >
+                <div class="text"
+                  :style="generateStyle()"
+                >
+                {{ person }}</div>
+              </li>
+            </ul>
+            <div
+              class="wheel-pointer"
+              @click="onClickRotate('text')"
+            >
+              Start
+            </div>
+          </dir>
+        </b-col>
+
+        <b-col cols="4">
+          <b-list-group>
+            <b-list-group-item v-for="(person, index) in remaining" :key="index">
+              {{ person }} <b-button variant="danger" v-on:click="removePerson(person)">Remove</b-button>
+            </b-list-group-item>
+          </b-list-group>
+        </b-col>
+
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -33,8 +48,7 @@ export default {
   name: 'wheel',
   props: {
     roomKey: String,
-    socket: null,
-    url: String
+    socket: null
   },
   data() {
     return{
@@ -51,7 +65,6 @@ export default {
     var self = this
     this.socket.onmessage = function(event) {
       var data = JSON.parse(event.data)
-      console.log(data)
       self.remaining = data.remaining
       if (data.picked != null) {
         if ( data.remaining.length == 0) {
@@ -106,6 +119,12 @@ export default {
         self.nowSpeeking = remaining[result];
         self.$forceUpdate();
       }, 4500);
+    },
+    removePerson(person) {
+      this.socket.send(JSON.stringify({
+        "message": "remove_person",
+        "name": person
+      }))
     }
   },
 }

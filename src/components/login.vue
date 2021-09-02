@@ -1,14 +1,14 @@
 <template>
   <div id="login" class="container-fluid" align="center">
-      <div id="loginForm" v-if="!socket">
+      <div id="loginForm" v-if="!connected">
 
         <div class="container">
             <span >Room key: <input type="text" name="roomKey" id="roomKey" v-model="roomKey"></span><br />
             <button v-on:click="joinRoom()">Enter room</button>
       </div>
       </div>
-        <div id="wheel" v-if="socket">
-            <wheel :roomKey="roomKey" :socket="socket" :url="url"></wheel>
+        <div id="wheel" v-if="connected">
+            <wheel :roomKey="roomKey" :socket="socket"></wheel>
         </div>
   </div>
 </template>
@@ -26,30 +26,37 @@ export default {
     return{
       url: "dejli-losowanko-backend.herokuapp.com",
       roomKey: '',
-      socket: null
+      socket: null,
+      connected: false
     }
   },
   created() {
-    this.roomKey = window.location.href.split('/')[3]
-    console.log(this.roomKey)
-    if(this.roomKey != "") {
+    var roomKey = new URL(location.href).searchParams.get('room')
+    console.log(this.$router)
+    if(roomKey != null) {
+      this.roomKey = roomKey
       this.joinRoom()
-    }
-  },
-  sockets: {
-    connect: function () {
-      console.log('socket connected')
     }
   },
   methods: {
     joinRoom: function () {
+      var self = this
       if(this.roomKey.length == 0) {
           alert("Name or key empty")
       }
       else{
         this.socket = new WebSocket('wss://'+ this.url +'/ws/' + this.roomKey)
+        this.socket.onopen = function() {
+          self.connected = true
+        }
+        var roomKey = new URL(location.href).searchParams.get('room')
+        if(roomKey === null){
+          const url = new URL(location.href);
+          url.searchParams.set('room', self.roomKey);
+          history.pushState(null, '', url);
+        }
       }
-    }
+    },
   },
 }
 </script>
