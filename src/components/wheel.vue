@@ -3,7 +3,7 @@
     <span v-if="roomKey.length">Key: {{ roomKey }}</span><br />
     <span>Name: <input type="text" name="name" id="name" v-model="name"><button v-on:click="joinRoom()">Join</button></span><br />
     <span>Mówi: {{ nowSpeeking }}</span>
-    <b-container fluid>
+    <b-container>
       <b-row>
         <b-col cols="8">
           <dir id="wrapper">
