@@ -24,8 +24,7 @@ export default {
   },
   data() {
     return{
-      // url: "dejli-losowanko-backend.herokuapp.com",127.0.0.1:8000
-      url: "127.0.0.1:8000",
+      url: "dejli-losowanko-backend.herokuapp.com",
       roomKey: '',
       socket: null,
       connected: false,
@@ -53,7 +52,7 @@ export default {
           alert("Name or key empty")
       }
       else{
-        this.socket = new WebSocket('ws://'+ this.url +'/ws/' + this.roomKey)
+        this.socket = new WebSocket('wss://'+ this.url +'/ws/' + this.roomKey)
         this.socket.onopen = function() {
           self.connected = true
         }
