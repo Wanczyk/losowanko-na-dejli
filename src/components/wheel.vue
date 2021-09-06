@@ -48,7 +48,8 @@ export default {
   name: 'wheel',
   props: {
     roomKey: String,
-    socket: null
+    socket: null,
+    remaining: Array
   },
   data() {
     return{
@@ -57,8 +58,7 @@ export default {
       name: "",
       wheelDeg: 0,
       nowSpeeking: '',
-      result: null,
-      remaining: null
+      result: null
     }
   },
   created() {

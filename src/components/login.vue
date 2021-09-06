@@ -8,7 +8,7 @@
       </div>
       </div>
         <div id="wheel" v-if="connected">
-            <wheel :roomKey="roomKey" :socket="socket"></wheel>
+            <wheel :roomKey="roomKey" :socket="socket" :remaining="remaining"></wheel>
         </div>
   </div>
 </template>
@@ -24,10 +24,12 @@ export default {
   },
   data() {
     return{
-      url: "dejli-losowanko-backend.herokuapp.com",
+      // url: "dejli-losowanko-backend.herokuapp.com",127.0.0.1:8000
+      url: "127.0.0.1:8000",
       roomKey: '',
       socket: null,
-      connected: false
+      connected: false,
+      remaining: []
     }
   },
   created() {
@@ -37,6 +39,12 @@ export default {
       this.roomKey = roomKey
       this.joinRoom()
     }
+
+    var self = this
+    this.socket.onmessage = function(event) {
+      var data = JSON.parse(event.data)
+      self.remaining = data.remaining
+    }
   },
   methods: {
     joinRoom: function () {
@@ -45,7 +53,7 @@ export default {
           alert("Name or key empty")
       }
       else{
-        this.socket = new WebSocket('wss://'+ this.url +'/ws/' + this.roomKey)
+        this.socket = new WebSocket('ws://'+ this.url +'/ws/' + this.roomKey)
         this.socket.onopen = function() {
           self.connected = true
         }
